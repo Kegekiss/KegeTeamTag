@@ -1,0 +1,11 @@
+name: KegeTeamTag
+main: com.kegekiss.kegeteamtag.KegeTeamTag
+version: 1.0
+author: Kegekiss
+depend: [Vault]
+commands:
+  ktt:
+    description: Recharger les teams.
+    usage: /<command>
+    permission: kegeteamtag.reload
+    permission-message: Vous n'avez pas la permission de taper cette commande!
