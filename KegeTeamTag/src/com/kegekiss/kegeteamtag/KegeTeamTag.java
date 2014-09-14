@@ -17,6 +17,7 @@ public class KegeTeamTag extends JavaPlugin {
 	
 	Scoreboard scoreboard;
 	
+	@SuppressWarnings("deprecation")
 	@Override
     public void onEnable() {
 		
@@ -27,9 +28,8 @@ public class KegeTeamTag extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
 		} else {
 			getLogger().info("Plugin de formatage trouvé! Création des teams selon les groupes...");
-	        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-	        	
-	            @SuppressWarnings("deprecation" )
+	        taskId = Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+
 				@Override
 	            public void run() {
 	            	if (checkTeams()) {
