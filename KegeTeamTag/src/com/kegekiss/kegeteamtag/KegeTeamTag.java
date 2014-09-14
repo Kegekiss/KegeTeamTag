@@ -13,32 +13,41 @@ import org.bukkit.scoreboard.Team;
 public class KegeTeamTag extends JavaPlugin {
 
 	public static Chat chat = null;
+	public static JavaPlugin plugin;
 	int taskId;
 	
 	Scoreboard scoreboard;
 	
-	@SuppressWarnings("deprecation")
 	@Override
     public void onEnable() {
 		
 		scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+		plugin = this;
 		
 		if (!(setupChat())) {
             getLogger().severe(String.format("Problème majeur trouvé : Pas de plugin de formatage du tchat!"));
             Bukkit.getPluginManager().disablePlugin(this);
 		} else {
 			getLogger().info("Plugin de formatage trouvé! Création des teams selon les groupes...");
-	        taskId = Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+	        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 
 				@Override
 	            public void run() {
-	            	if (checkTeams()) {
-	            		for (Player player: Bukkit.getOnlinePlayers()) {
-	            			checkPlayerGroup(player);
-	            		}
-	            	} else {
-	            		createTeams();
-	            	}
+					Bukkit.getScheduler().runTaskAsynchronously(KegeTeamTag.plugin, new Runnable() {
+
+						@SuppressWarnings("deprecation")
+						@Override
+						public void run() {
+			            	if (checkTeams()) {
+			            		for (Player player: Bukkit.getOnlinePlayers()) {
+			            			checkPlayerGroup(player);
+			            		}
+			            	} else {
+			            		createTeams();
+			            	}
+						}
+						
+					});
         		}
 	        }, 0L, 20L);
 		}
