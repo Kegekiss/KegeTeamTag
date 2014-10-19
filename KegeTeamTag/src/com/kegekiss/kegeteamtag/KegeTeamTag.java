@@ -13,42 +13,31 @@ import org.bukkit.scoreboard.Team;
 public class KegeTeamTag extends JavaPlugin {
 
 	public static Chat chat = null;
-	public static JavaPlugin plugin;
-	int taskId;
 	
-	Scoreboard scoreboard;
+	private Scoreboard scoreboard;
 	
 	@Override
     public void onEnable() {
 		
 		scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-		plugin = this;
 		
 		if (!(setupChat())) {
             getLogger().severe(String.format("Problème majeur trouvé : Pas de plugin de formatage du tchat!"));
             Bukkit.getPluginManager().disablePlugin(this);
 		} else {
 			getLogger().info("Plugin de formatage trouvé! Création des teams selon les groupes...");
-	        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-
+	        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				@SuppressWarnings("deprecation")
 				@Override
-	            public void run() {
-					Bukkit.getScheduler().runTaskAsynchronously(KegeTeamTag.plugin, new Runnable() {
-
-						@SuppressWarnings("deprecation")
-						@Override
-						public void run() {
-			            	if (checkTeams()) {
-			            		for (Player player: Bukkit.getOnlinePlayers()) {
-			            			checkPlayerGroup(player);
-			            		}
-			            	} else {
-			            		createTeams();
-			            	}
-						}
-						
-					});
-        		}
+				public void run() {
+	            	if (checkTeams()) {
+	            		for (Player player: Bukkit.getOnlinePlayers()) {
+	            			checkPlayerGroup(player);
+	            		}
+	            	} else {
+	            		createTeams();
+	            	}
+				}
 	        }, 0L, 20L);
 		}
 	}
@@ -206,6 +195,5 @@ public class KegeTeamTag extends JavaPlugin {
     public void onDisable() {
 		getLogger().info("Désactivation de KegeTeamTag...");
 		removeTeams();
-		Bukkit.getServer().getScheduler().cancelTask(taskId);
 	}
 }
