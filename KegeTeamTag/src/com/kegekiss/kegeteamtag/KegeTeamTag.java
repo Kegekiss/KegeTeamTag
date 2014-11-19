@@ -149,7 +149,10 @@ public class KegeTeamTag extends JavaPlugin {
 			playerName = null;
 		}			
 		if (player.getPlayerListName().equals(playerName) || ChatColor.stripColor(player.getPlayerListName()).equals(player.getName())) {
-			player.setPlayerListName(getColors('&', chat.getGroupPrefix(Bukkit.getWorlds().get(0), chat.getPrimaryGroup(player))) + player.getName());
+			String tabName = getColors('&', chat.getGroupPrefix(Bukkit.getWorlds().get(0), chat.getPrimaryGroup(player))) + player.getName();
+			if (tabName.length() <= 16) {
+				player.setPlayerListName(tabName);
+			}
 		}			 
 	}
     
